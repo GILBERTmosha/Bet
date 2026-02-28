@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="dark">
+
+<header>
+<h2>EDU PAWA DASHBOARD</h2>
+<button onclick="logout()">Logout</button>
+</header>
+
+<div class="courses">
+
+<div class="card">
+<h3>Mathematics</h3>
+<p>Points: 2.5x</p>
+<button onclick="enroll('Mathematics',2.5)">Enroll</button>
+</div>
+
+<div class="card">
+<h3>Computer</h3>
+<p>Points: 3.0x</p>
+<button onclick="enroll('Computer',3.0)">Enroll</button>
+</div>
+
+<div class="card">
+<h3>Biology</h3>
+<p>Points: 1.8x</p>
+<button onclick="enroll('Biology',1.8)">Enroll</button>
+</div>
+
+</div>
+
+<script src="firebase.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
