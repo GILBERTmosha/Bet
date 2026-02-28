@@ -22,15 +22,17 @@ margin:8px 0;
 background:#222;
 border:1px solid green;
 color:white;
+border-radius:5px;
 }
 
 button{
 background:green;
 border:none;
-padding:8px 15px;
+padding:10px 15px;
 margin:5px;
 color:white;
 cursor:pointer;
+border-radius:5px;
 }
 
 button:hover{
@@ -38,38 +40,15 @@ background:lime;
 color:black;
 }
 
+.forgot{
+color:lime;
+cursor:pointer;
+margin-top:10px;
+}
+
 header{
 display:flex;
 justify-content:space-between;
 padding:15px;
 background:#1a1a1a;
-}
-
-.container{
-width:60%;
-float:left;
-padding:20px;
-}
-
-.match{
-background:#1c1c1c;
-padding:15px;
-margin-bottom:10px;
-}
-
-.betslip{
-width:35%;
-float:right;
-background:#1a1a1a;
-padding:20px;
-height:100vh;
-overflow:auto;
-}
-
-@media(max-width:768px){
-.container,.betslip{
-width:100%;
-float:none;
-height:auto;
-}
 }
