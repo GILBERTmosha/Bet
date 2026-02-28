@@ -10,17 +10,18 @@
 <div class="auth-box">
 <h2>BET PRO</h2>
 
-<input type="text" id="username" placeholder="Username">
+<input type="email" id="email" placeholder="Email">
 <input type="password" id="password" placeholder="Password">
 
 <button onclick="register()">Register</button>
 <button onclick="login()">Login</button>
 
-<input type="text" id="adminCode" placeholder="Admin Code">
-<button onclick="adminAccess()">Admin Login</button>
+<p class="forgot" onclick="forgotPassword()">Forgot Password?</p>
 
 </div>
 
-<script src="app.js"></script>
+<script type="module" src="firebase.js"></script>
+<script type="module" src="app.js"></script>
+
 </body>
 </html>
