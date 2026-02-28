@@ -1,75 +1,107 @@
+let users = [];
+let currentUser = null;
+let balance = 10000;
+let bets = [];
+let totalOdds = 1;
+
 // REGISTER
 function register(){
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
-
-auth.createUserWithEmailAndPassword(email,password)
-.then(()=> alert("Registered Successfully"))
-.catch(err=> alert(err.message));
+let u = username.value;
+let p = password.value;
+users.push({u,p,balance:10000});
+alert("Registered Successfully");
 }
 
 // LOGIN
 function login(){
-const email = document.getElementById("email").value;
-const password = document.getElementById("password").value;
+let u = username.value;
+let p = password.value;
 
-auth.signInWithEmailAndPassword(email,password)
-.then(()=> window.location="dashboard.html")
-.catch(err=> alert(err.message));
+let user = users.find(x=>x.u===u && x.p===p);
+if(user){
+currentUser=user;
+balance=user.balance;
+window.location="dashboard.html";
+}else{
+alert("Wrong Details");
+}
+}
+
+// ADMIN SECRET CODE
+function adminAccess(){
+let code = document.getElementById("adminCode").value;
+if(code==="B&R"){
+window.location="admin.html";
+}else{
+alert("Wrong Admin Code");
+}
 }
 
 // LOGOUT
 function logout(){
-auth.signOut().then(()=> window.location="index.html");
+window.location="index.html";
 }
 
-// ENROLL COURSE
-function enroll(course,points){
-let user = auth.currentUser;
-if(!user){ alert("Login first"); return;}
-
-db.collection("enrollments").add({
-user:user.email,
-course:course,
-points:points,
-time:firebase.firestore.FieldValue.serverTimestamp()
-}).then(()=>{
-alert("Enrolled in "+course);
-calculatePoints();
-});
+// ADD BET
+function addBet(name,odd){
+bets.push({name,odd});
+totalOdds*=odd;
+updateSlip();
 }
 
-// CALCULATE TOTAL POINTS
-function calculatePoints(){
-let user = auth.currentUser;
-let total = 0;
-
-db.collection("enrollments")
-.where("user","==",user.email)
-.get()
-.then(snapshot=>{
-snapshot.forEach(doc=>{
-total += doc.data().points;
+function updateSlip(){
+let out="";
+bets.forEach(b=>{
+out+=`<p>${b.name} @ ${b.odd}</p>`;
 });
-document.getElementById("totalPoints").innerText = total;
-});
+slip.innerHTML=out;
+totalOddsDisplay=document.getElementById("totalOdds");
+totalOddsDisplay.innerText=totalOdds.toFixed(2);
+calculateWin();
 }
 
-if(window.location.pathname.includes("dashboard")){
-auth.onAuthStateChanged(user=>{
-if(user){ calculatePoints(); }
-else{ window.location="index.html"; }
-});
+stake.addEventListener("input",calculateWin);
+
+function calculateWin(){
+let s=parseFloat(stake.value)||0;
+possibleWin.innerText=(s*totalOdds).toFixed(2);
 }
 
-// ADMIN VIEW
-function viewEnrollments(){
-db.collection("enrollments").get().then(snapshot=>{
-let output="";
-snapshot.forEach(doc=>{
-let data = doc.data();
-output += `<p>${data.user} - ${data.course} (${data.points}x)</p>`;
-});
-document.getElementById("users").innerHTML=output;
-});
+function placeBet(){
+let s=parseFloat(stake.value);
+if(s>balance){alert("Insufficient Balance");return;}
+balance-=s;
+document.getElementById("balance").innerText=balance;
+
+history.innerHTML+=`<p>Bet ${s} TZS @ ${totalOdds.toFixed(2)}</p>`;
+
+bets=[];
+totalOdds=1;
+updateSlip();
+}
+
+// DEPOSIT
+function deposit(){
+let amt=parseFloat(prompt("Deposit Amount:"));
+if(amt>0){
+balance+=amt;
+document.getElementById("balance").innerText=balance;
+}
+}
+
+// WITHDRAW
+function withdraw(){
+let amt=parseFloat(prompt("Withdraw Amount:"));
+if(amt>balance){alert("Not enough balance");return;}
+balance-=amt;
+document.getElementById("balance").innerText=balance;
+}
+
+// ADMIN FUNCTIONS
+function addMatch(){
+adminOutput.innerHTML+="<p>New Match Added (Demo)</p>";
+}
+
+function viewUsers(){
+adminOutput.innerHTML=JSON.stringify(users);
 }
