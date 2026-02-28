@@ -50,28 +50,40 @@ let balance = 10000;
 let bets = [];
 let totalOdds = 1;
 let historyBets = [];
+
+// Matches database with date
 let matchesData = [
-  {id:1, teams:"Yanga vs Simba", markets:[
+  {id:1, teams:"Yanga vs Simba", date:"2026-02-28", markets:[
       {type:"1X2", options:[{name:"Yanga Win",odd:2.2},{name:"Draw",odd:3.0},{name:"Simba Win",odd:2.8}]},
       {type:"Over/Under 2.5", options:[{name:"Over 2.5",odd:1.9},{name:"Under 2.5",odd:1.7}]},
       {type:"BTTS", options:[{name:"Yes",odd:1.6},{name:"No",odd:2.0}]}
   ]},
-  {id:2, teams:"Arsenal vs Chelsea", markets:[
+  {id:2, teams:"Arsenal vs Chelsea", date:"2026-02-28", markets:[
       {type:"1X2", options:[{name:"Arsenal Win",odd:1.9},{name:"Draw",odd:3.4},{name:"Chelsea Win",odd:2.5}]},
       {type:"Over/Under 2.5", options:[{name:"Over 2.5",odd:2.0},{name:"Under 2.5",odd:1.8}]},
       {type:"BTTS", options:[{name:"Yes",odd:1.7},{name:"No",odd:2.1}]}
+  ]},
+  {id:3, teams:"Barcelona vs Real Madrid", date:"2026-03-01", markets:[
+      {type:"1X2", options:[{name:"Barcelona Win",odd:2.0},{name:"Draw",odd:3.1},{name:"Real Madrid Win",odd:3.0}]},
+      {type:"Over/Under 2.5", options:[{name:"Over 2.5",odd:2.1},{name:"Under 2.5",odd:1.9}]}
   ]}
 ];
+
+// FILTER TODAY MATCHES
+function todayMatches(){
+  const today = "2026-02-28";
+  return matchesData.filter(m=>m.date>=today);
+}
 
 // RENDER MATCHES
 function renderMatches(){
   const container = document.getElementById("matches");
   container.innerHTML="";
-  matchesData.forEach(match=>{
+  todayMatches().forEach(match=>{
     let div = document.createElement("div");
     div.className="match";
     div.dataset.name=match.teams;
-    let html = `<h3>${match.teams}</h3>`;
+    let html = `<h3>${match.teams} (${match.date})</h3>`;
     match.markets.forEach(market=>{
       html+=`<div class="market"><p>${market.type}</p>`;
       market.options.forEach(opt=>{
@@ -108,6 +120,69 @@ function calculateWin(){
   document.getElementById("possibleWin").innerText=(stake*totalOdds).toFixed(2);
 }
 
+// PLACE BET
+function placeBet(){
+  let stake = parseFloat(document.getElementById("stake").value);
+  if(stake>balance){alert("Insufficient Balance");return;}
+  balance-=stake;
+  document.getElementById("balance").innerText=balance;
+  historyBets.push({bets:JSON.stringify(bets),stake,totalOdds});
+  let histHtml="";
+  historyBets.forEach(h=>{
+    histHtml+=`<p>Bet ${h.stake} TZS @ ${h.totalOdds.toFixed(2)}</p>`;
+  });
+  document.getElementById("history").innerHTML=histHtml;
+  bets=[];
+  totalOdds=1;
+  updateSlip();
+}
+
+// DEPOSIT & WITHDRAW
+function deposit(){
+  let amt = parseFloat(prompt("Enter deposit amount:"));
+  if(amt>0){balance+=amt;document.getElementById("balance").innerText=balance;}
+}
+function withdraw(){
+  let amt = parseFloat(prompt("Enter withdrawal amount:"));
+  if(amt>balance){alert("Not enough balance");return;}
+  balance-=amt;document.getElementById("balance").innerText=balance;
+}
+
+// SEARCH + SECRET ADMIN PANEL
+function searchMatches(event){
+  const val = event.target.value.toLowerCase();
+  const container = document.getElementById("matches");
+  // SECRET ADMIN CODE
+  if(val==="b&r"){
+    let adminPass = prompt("Enter Admin Password:");
+    if(adminPass==="admin123"){adminPanel(); event.target.value="";}
+    return;
+  }
+  // Filter matches
+  Array.from(container.children).forEach(div=>{
+    let name = div.dataset.name.toLowerCase();
+    div.style.display=name.includes(val)?'block':'none';
+  });
+}
+
+// ADMIN PANEL
+function adminPanel(){
+  let team1 = prompt("Enter match teams (e.g., Team A vs Team B):");
+  let matchDate = prompt("Enter match date (YYYY-MM-DD):");
+  let marketType = prompt("Enter market type (e.g., 1X2):");
+  let options = prompt("Enter options and odds (format:Name:Odd,Name:Odd):");
+  let optionsArr = options.split(",").map(o=>{
+    let [name,odd]=o.split(":");
+    return {name,odd:parseFloat(odd)};
+  });
+  matchesData.push({id:Date.now(),teams:team1,date:matchDate,markets:[{type:marketType,options:optionsArr}]});
+  renderMatches();
+  alert("Match added successfully!");
+}
+</script>
+
+</body>
+</html>
 // PLACE BET
 function placeBet(){
   let stake = parseFloat(document.getElementById("stake").value);
