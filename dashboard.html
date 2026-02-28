@@ -8,47 +8,14 @@
 <body class="dark">
 
 <header>
-<h3>BET PRO DASHBOARD</h3>
-<div>
-Balance: <span id="balance">10000</span> TZS
-<button onclick="deposit()">Deposit</button>
-<button onclick="withdraw()">Withdraw</button>
+<h3>Welcome to BET PRO</h3>
 <button onclick="logout()">Logout</button>
-</div>
 </header>
 
-<div class="container">
+<h2 style="text-align:center;">You are Logged In Successfully 👑</h2>
 
-<div class="match">
-<h4>Yanga vs Simba</h4>
-<button onclick="addBet('Yanga Win',2.1)">2.1</button>
-<button onclick="addBet('Draw',3.0)">3.0</button>
-<button onclick="addBet('Simba Win',2.8)">2.8</button>
-</div>
+<script type="module" src="firebase.js"></script>
+<script type="module" src="app.js"></script>
 
-<div class="match">
-<h4>Arsenal vs Chelsea</h4>
-<button onclick="addBet('Arsenal',1.9)">1.9</button>
-<button onclick="addBet('Draw',3.4)">3.4</button>
-<button onclick="addBet('Chelsea',2.5)">2.5</button>
-</div>
-
-</div>
-
-<div class="betslip">
-<h3>Bet Slip</h3>
-<div id="slip"></div>
-
-<input type="number" id="stake" placeholder="Enter Stake">
-<p>Total Odds: <span id="totalOdds">1.00</span></p>
-<p>Possible Win: <span id="possibleWin">0</span></p>
-<button onclick="placeBet()">Place Bet</button>
-
-<h4>Bet History</h4>
-<div id="history"></div>
-
-</div>
-
-<script src="app.js"></script>
 </body>
 </html>
