@@ -1,0 +1,64 @@
+body.dark{
+background:#0f0f0f;
+color:white;
+font-family:Arial;
+margin:0;
+}
+
+.auth-box{
+width:300px;
+margin:100px auto;
+background:#1a1a1a;
+padding:30px;
+border-radius:10px;
+text-align:center;
+box-shadow:0 0 20px green;
+animation:fadeIn 1s ease;
+}
+
+input{
+width:100%;
+padding:10px;
+margin:10px 0;
+background:#222;
+border:1px solid green;
+color:white;
+}
+
+button{
+background:green;
+border:none;
+padding:10px 20px;
+color:white;
+margin:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:lime;
+color:black;
+}
+
+.card{
+background:#1c1c1c;
+padding:20px;
+margin:15px;
+border-radius:10px;
+box-shadow:0 0 10px green;
+transition:0.3s;
+}
+
+.card:hover{
+transform:scale(1.05);
+}
+
+.courses{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+@keyframes fadeIn{
+from{opacity:0;}
+to{opacity:1;}
+}
